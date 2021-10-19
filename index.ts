@@ -1,14 +1,24 @@
 import express = require('express')
 const redis = require('redis')
 const app = express()
+const http = require('http')
+const server = http.createServer(app)
+const { Server } = require('socket.io')
+const io = new Server(server)
+
 let bodyParser = require('body-parser')
 let multer = require('multer')
 let upload = multer()
 let cookieParser = require('cookie-parser')
 import expressSession = require('express-session')
 
-let redisStore = require('connect-redis')(expressSession)
-let redisClient = redis.createClient()
+// let redisStore = require('connect-redis')(expressSession)
+// let redisClient = redis.createClient()
+
+io.on('connection', (socket) => {
+	console.log('a user connected', socket)
+	socket.on('myMessage', 'hi from socket.io server')
+})
 
 app.use(
 	expressSession({

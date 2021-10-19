@@ -3,13 +3,21 @@ exports.__esModule = true;
 var express = require("express");
 var redis = require('redis');
 var app = express();
+var http = require('http');
+var server = http.createServer(app);
+var Server = require('socket.io').Server;
+var io = new Server(server);
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer();
 var cookieParser = require('cookie-parser');
 var expressSession = require("express-session");
-var redisStore = require('connect-redis')(expressSession);
-var redisClient = redis.createClient();
+// let redisStore = require('connect-redis')(expressSession)
+// let redisClient = redis.createClient()
+io.on('connection', function (socket) {
+    console.log('a user connected', socket);
+    socket.on('myMessage', 'hi from socket.io server');
+});
 app.use(expressSession({
     // resave: true,
     // saveUninitialized: true,
